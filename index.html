@@ -1,0 +1,85 @@
+
+<style>
+  
+  .container {
+    padding: 16px;
+
+
+}
+  </style>
+<link  rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> </script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+
+ 
+<form id="login-form">
+
+  <div class="container">
+   <center> <h2>Login Form</h2> </center>
+    <label><b>Username</b></label>
+    <input type="text" class="form-control" placeholder="Enter Username" id="username" required>
+    <input type="submit" class="btn btn-info" id="show">
+  </div>
+</form>
+
+
+ <div class="col-md-8">
+    <div class="col-md-offset-5">
+      
+<div  id="chat"> </div> </div> </div>
+
+<form id="send-form" hidden>
+  <div class="container">
+   
+   <div class="col-md-12">
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon" >Enter the message</span>
+  <input type="text" id="msg" class="form-control">
+  </div>
+  <input type="submit" class="btn btn-info">
+  </div>
+ </div>
+  
+</form>
+  
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    $(function(){
+  var socket = io.connect();
+
+var $msgform=$('#send-form');
+var $loginform=$('#login-form');
+var $msg=$('#msg');
+var $chat=$('#chat');
+var $username=$('#username');
+
+$loginform.submit(function(e) {
+  socket.emit('username',$username.val()); 
+
+  $('#send-form').show();
+  $loginform.hide();
+  e.preventDefault();
+  
+   
+  
+});
+
+$msgform.submit(function(e){
+e.preventDefault();
+socket.emit('msg',$msg.val()); 
+$msg.val('');
+});
+
+
+
+
+socket.on('new_msg',function(data){
+
+$chat.append("<div class='alert alert-info'>"+data.user +":"+data.msg+"</div>");
+
+    }); 
+});
+
+  
+  
+</script>
