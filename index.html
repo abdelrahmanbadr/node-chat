@@ -25,7 +25,7 @@
  <div class="col-md-8">
     <div class="col-md-offset-5">
       
-<div  id="chat"> </div> </div> </div>
+<div  id="chat" hidden> </div> </div> </div>
 
 <form id="send-form" hidden>
   <div class="container">
@@ -57,6 +57,7 @@ $loginform.submit(function(e) {
   socket.emit('username',$username.val()); 
 
   $('#send-form').show();
+  $('#chat').show();
   $loginform.hide();
   e.preventDefault();
   
@@ -73,9 +74,20 @@ $msg.val('');
 
 
 
-socket.on('new_msg',function(data){
-
+    function displaymsg(data){
 $chat.append("<div class='alert alert-info'>"+data.user +":"+data.msg+"</div>");
+    }
+
+socket.on('old_msg',function(data){
+for(var i=0; i<data.length; i++)
+{
+  displaymsg(data[i]);
+}
+    }); 
+    
+socket.on('new_msg',function(data){
+displaymsg(data);
+
 
     }); 
 });
